@@ -19,7 +19,7 @@
   onMount(async () => {
     console.log("onMount");
     L = (await import("leaflet")).default;
-
+    let B = (await import("leaflet-boundary-canvas")).default;
     // set up the map
     map = L.map(refElement, { preferCanvas: true });
 
@@ -27,7 +27,7 @@
     var osmUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
     var osmAttrib =
       'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors';
-    var osm = new L.TileLayer(osmUrl, {
+    var osm = new L.TileLayer.BoundaryCanvas(osmUrl, {
       minZoom: 1,
       maxZoom: 15,
       attribution: osmAttrib,

@@ -2,6 +2,7 @@
   import "../app.css";
 
   import { onMount } from "svelte";
+  import { randomStyle } from "$lib/mapStyles";
 
   //   import { features } from "$lib/countries.json";
   import geoJson from "world-geojson";
@@ -11,14 +12,19 @@
 
   let datasets = [
     {
-      countryCode: "AU",
-      style: "classic-noborder.poly",
+      countryCode: "DK",
+      style: randomStyle(),
       datasetKey: "4d1bd299-2435-47e2-8fe1-ac949394a40d",
     },
     {
       countryCode: "SI",
-      style: "classic-noborder.poly",
+      style: randomStyle(),
       datasetKey: "ebf3c079-f88e-4b85-bcc5-f568229e68f3",
+    },
+    {
+      countryCode: "RU",
+      style: randomStyle(),
+      datasetKey: "af5f680a-e0cc-46c8-b623-ceeaab70aa9e",
     },
   ];
 
