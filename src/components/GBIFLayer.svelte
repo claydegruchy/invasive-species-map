@@ -1,7 +1,6 @@
 <script>
   import { onMount, getContext } from "svelte";
   import { GetCountry } from "$lib/getCountry";
-  // import "leaflet-boundary-canvas";
 
   //   get geojson of each country
 
@@ -13,9 +12,10 @@
   export let countryCode;
 
   onMount(async () => {
-    console.log(await GetCountry(countryCode));
+    let countryPoly = await GetCountry(countryCode);
     console.log("onMount layer");
     L = (await import("leaflet")).default;
+    let B = (await import("leaflet-boundary-canvas")).default;
 
     // url generation
     const baseUrl = new URL(
@@ -33,28 +33,35 @@
     args.forEach(([key, value]) => {
       if (value) urlParams.append(key, value);
     });
-    // urlParams.set("style", "green.point");
-    // https://api.gbif.org/v2/map/occurrence/density/1/0/1@2x.png?srs=EPSG:4326&style=blue.marker&publishingOrg=7b8aff00-a9f8-11d8-944b-b8a03c50a862&bin=hex&hexPerTile=41&year=2000,2017
 
     baseUrl.search = urlParams.toString();
     let url = decodeURI(baseUrl.toString());
     console.log(url);
-    // https://tile.gbif.org/4326/omt/{z}/{x}/{y}@2x.png?style=gbif-classic
-    // ../../../map/occurrence/density/{z}/{x}/{y}.mvt?srs=EPSG:4326&bin=hex&hexPerTile=17
-    // add the GBIF occurrence overlay
+
     var gbifUrl = url;
     var gbifAttrib = '<a href="https://www.gbif.org">GBIF</a>';
 
-    var gbifOverlay = L.tileLayer(gbifUrl, {
+    var gbifOverlay = new L.TileLayer.BoundaryCanvas(gbifUrl, {
+      // boundary: countryPoly,
       minZoom: 1,
       maxZoom: 15,
       zoomOffset: -1,
       tileSize: 512,
       attribution: gbifAttrib,
     });
+    // boundary: geoJSON, console.log(L.TileLayer.BoundaryCanvas);
 
-    
-
+    // add the country overlay
+    var countryOverlay = L.geoJSON(countryPoly, {
+      style: {
+        radius: 1,
+        fillColor: "#ff7800",
+        weight: 1,
+        // opacity: 0.1,
+        // fillOpacity: 0.1,
+      },
+    });
+    // map.addLayer(countryOverlay);
     map.addLayer(gbifOverlay);
   });
 </script>
