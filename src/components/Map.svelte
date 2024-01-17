@@ -1,16 +1,24 @@
 <script>
-  import { onMount, setContext } from "svelte";
+  import { onDestroy, onMount, setContext } from "svelte";
 
   import "leaflet/dist/leaflet.css";
 
-  setContext("sharedState", {});
+  setContext("sharedState", {
+    getL: async () => {
+      return L;
+    },
+    getMap: () => {
+      return map;
+    },
+  });
 
   let refElement = null;
   let map = null;
+  let L = null;
 
   onMount(async () => {
     console.log("onMount");
-    const L = (await import("leaflet")).default;
+    L = (await import("leaflet")).default;
 
     // set up the map
     map = L.map(refElement, { preferCanvas: true });
@@ -25,30 +33,8 @@
       attribution: osmAttrib,
     });
 
-    map.setView(new L.LatLng(-20, -50), 3);
+    map.setView(new L.LatLng(59.3293, 18.0686), 4);
     map.addLayer(osm);
-
-    // url generation
-    const baseUrl = new URL(
-      "https://api.gbif.org/v2/map/occurrence/density/{z}/{x}/{y}@1x.png?style=classic.point&srs=EPSG%3A3857"
-    );
-    const urlParams = new URLSearchParams(baseUrl.search);
-    baseUrl.search = urlParams.toString();
-    let url = decodeURI(baseUrl.toString());
-
-    // add the GBIF occurrence overlay
-    var gbifUrl = url;
-    var gbifAttrib = '<a href="https://www.gbif.org">GBIF</a>';
-
-    var gbifOverlay = L.tileLayer(gbifUrl, {
-      minZoom: 1,
-      maxZoom: 15,
-      zoomOffset: -1,
-      tileSize: 512,
-      attribution: gbifAttrib,
-    });
-
-    map.addLayer(gbifOverlay);
 
     // on destroy
     return () => ({
@@ -59,10 +45,15 @@
       },
     });
   });
+
+  onDestroy(() => {
+    console.log("destroy");
+    if (map) map.remove();
+  });
 </script>
 
 <div class="map" bind:this={refElement}>
-  {#if map}
+  {#if map && L}
     <slot />
   {/if}
 </div>
