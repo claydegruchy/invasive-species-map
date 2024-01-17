@@ -61,7 +61,7 @@
         // fillOpacity: 0.1,
       },
     });
-    map.addLayer(countryOverlay);
+    // map.addLayer(countryOverlay);
     map.addLayer(gbifOverlay);
   });
 </script>
