@@ -1,5 +1,5 @@
 # what
-one day this might be a map of invasive species
+one day this might be a map of invasive species. currently it works but its slow as shit
 
 
 # data
