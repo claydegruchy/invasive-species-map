@@ -44,6 +44,7 @@
 
   <Map>
     {#each datasets as { datasetKey, style, countryCode }, i}
+      <!-- {#each [datasets[3]] as { datasetKey, style, countryCode }, i} -->
       <GBIFLayer {datasetKey} {style} {countryCode} />
     {/each}
     <!-- <GBIFLayer

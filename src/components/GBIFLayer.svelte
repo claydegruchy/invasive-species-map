@@ -28,6 +28,7 @@
       // ["hexPerTile", "17"],
       //   ["year", "2000,2017"],
       ["datasetKey", datasetKey],
+      ["country", countryCode],
     ];
 
     args.forEach(([key, value]) => {
@@ -58,10 +59,10 @@
         fillColor: "#ff7800",
         weight: 1,
         // opacity: 0.1,
-        // fillOpacity: 0.1,
+        fillOpacity: 0.0,
       },
     });
-    // map.addLayer(countryOverlay);
+    map.addLayer(countryOverlay);
     map.addLayer(gbifOverlay);
   });
 </script>
